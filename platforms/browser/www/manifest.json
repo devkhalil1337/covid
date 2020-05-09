@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Covid-Pk",
+  "short_name": "Covid-Pk",
+  "version": "com.coronapk.pk",
+  "description": "This application shows live statistics of corona virus caes in Pakistan.",
+  "author": "Visionary Sols",
+  "icons": [],
+  "start_url": "index.html"
+}

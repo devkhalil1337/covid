@@ -1,0 +1,90 @@
+{
+  "_from": "cordova-play-services-version-adapter@^1.0.2",
+  "_id": "cordova-play-services-version-adapter@1.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-rYL0aCl1Db7+r/tOFCcU8uVymKWcBdxadw84afbQYTGKp2WPwToTonUUppdSo7Z7DYTa9P/aPjvnKbwO1d+cAg==",
+  "_location": "/cordova-play-services-version-adapter",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-play-services-version-adapter@^1.0.2",
+    "name": "cordova-play-services-version-adapter",
+    "escapedName": "cordova-play-services-version-adapter",
+    "rawSpec": "^1.0.2",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-play-services-version-adapter/-/cordova-play-services-version-adapter-1.0.2.tgz",
+  "_shasum": "08e4fd392ec26dcf28be67a355b79e79d60e4c3a",
+  "_spec": "cordova-play-services-version-adapter@^1.0.2",
+  "_where": "E:\\Project\\hello",
+  "author": {
+    "name": "AppFeel"
+  },
+  "bugs": {
+    "url": "https://github.com/appfeel/cordova-play-services-version-adapter/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "David Silvestre Gil",
+      "email": "david.silvestre@appfeel.com",
+      "url": "https://www.appfeel.com"
+    },
+    {
+      "name": "Ricard López Olivares",
+      "email": "ricard.lopez@appfeel.com",
+      "url": "https://www.appfeel.com"
+    }
+  ],
+  "cordova": {
+    "id": "cordova-play-services-version-adapter",
+    "platforms": [
+      "android",
+      "ios",
+      "windows",
+      "browser",
+      "osx",
+      "www"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova/Ionic Google Play Services Versions Incompatibility Adapter",
+  "engines": {
+    "name": "cordova",
+    "version": ">=7.0.0"
+  },
+  "homepage": "https://github.com/appfeel/cordova-play-services-version-adapter#readme",
+  "keywords": [
+    "exception",
+    "incompatibility",
+    "build",
+    "GoogleServicesPlugin",
+    "com.google.gms.googleservices.GoogleServicesPlugin",
+    "firebase",
+    "maps",
+    "admob",
+    "push",
+    "notification",
+    "analytics",
+    "play-services",
+    "appfeel",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "ionic",
+    "cordova"
+  ],
+  "license": "MIT",
+  "name": "cordova-play-services-version-adapter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appfeel/cordova-play-services-version-adapter.git"
+  },
+  "version": "1.0.2"
+}

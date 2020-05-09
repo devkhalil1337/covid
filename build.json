@@ -1,0 +1,13 @@
+{
+    "android":
+    {
+        "release":
+        {
+            "keystore": "coronapk.keystore",
+            "storePassword": "12ab34cd",
+            "alias":"coronapk",
+            "password":"12ab34cd",
+            "keystoretype":""
+        }
+    }
+}
