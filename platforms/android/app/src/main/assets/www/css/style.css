@@ -1,121 +1,128 @@
-body{
+body {
     background-color: #3fb0ef !important;
 }
-.wallet-container
-{
+
+.wallet-container {
     background: url(../img/khalil2.png);
-    /* background: url(../img/image.jpg); */
     background-repeat: round;
-    /* background:url(../img/image.jpg); */
-    /* background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(../img/image.jpg); */
-    width: 320px;
+    width: 100%;
+    height: 100%;
     color: #fff;
     font-size: 15px;
     padding: 20px 20px 0;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     position: absolute;
-    width: 100%;
-    height: 100%;
 }
-.page-title
-{
+
+.page-title {
     text-align: left;
+    font-weight: bold;
+    font-size: 16px;
 }
-.fa-user
-{
-    float:right;
+
+.fa-user,
+.fa-refresh {
+    float: right;
 }
-.fa-refresh
-{
-    float:right;
-}
-.fa-home
-{
+
+.fa-home {
     margin-right: 10px;
 }
-.amount-box img{
+
+.amount-box img {
     width: 50px;
 }
-.amount{
+
+.amount {
     font-size: 35px;
 }
-.amount-box p{
-    margin:10px
-   /* margin-top: 10px;
-   margin-bottom: -10px; */
+
+.amount-box p {
+    margin: 10px;
 }
-.btn-group{
+
+.btn-group {
     margin: 20px 0;
 }
-.btn-group .btn{
+
+.btn-group .btn {
     margin: 8px;
     border-radius: 20px !important;
-    font-size:12px;
+    font-size: 12px;
 }
-.txn-history
-{
-    /* New Added */
+
+.txn-history {
     clear: both;
     position: relative;
     height: 200px;
     margin-top: 141px;
-    /* New Added */
-
     text-align: left;
 }
-.txn-list
-{
+
+.txn-list {
     background-color: #fff;
     padding: 12px 10px;
     color: rgb(67, 160, 71);
     font-size: 14px;
     margin: 7px 0;
 }
-.doubt-amount{
-    color:red;
+
+.doubt-amount {
+    color: red;
     float: right;
 }
-.credit-amount{
-    color:green;
+
+.credit-amount {
+    color: green;
     float: right;
 }
-.footer-menu
-{
+
+.footer-menu {
     margin: 20px -20px 0;
     bottom: 0;
     border-top: 1px solid #ccc;
     padding: 10px 10px 0;
 }
-.footer-menu p
-{
-    font-size:12px;
+
+.footer-menu p {
+    font-size: 12px;
 }
-.totalcase{
-    font-weight: bold;
-}
-.recover{
-    color:rgb(67, 160, 71);
-    font-weight: bold;
-}
-.critical
-{
-    color:rgb(30, 136, 229);
-    font-weight: bold;
-}
-.deaths{
-    color: rgb(255, 0, 0);
+
+.totalcase {
     font-weight: bold;
 }
 
-@media only screen and (min-width: 320px)  {
-    .wallet-container
-    {
+.recover,
+.critical,
+.deaths {
+    font-weight: bold;
+}
+
+/* Optional: you can assign new neutral colors to old COVID terms */
+.recover {
+    color: #4caf50;
+    /* green */
+}
+
+.critical {
+    color: #1976d2;
+    /* blue */
+}
+
+.deaths {
+    color: #f44336;
+    /* red */
+}
+
+@media only screen and (min-width: 320px) {
+    .wallet-container {
         font-size: 12px;
         font-weight: 100;
     }
-    .amount{
+
+    .amount {
         font-size: 20px;
     }
 }

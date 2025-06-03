@@ -1,115 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <title>Hello World</title>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="js/jquery.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="css/style.css"> 
-        <link rel="stylesheet" href="css/loader.css">
-    </head>
-    <body ng-app="myApp" ng-controller="myCtrl">
-            <div class="loader" ng-if="loader"></div>
-        <div class="container">
+
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <title>Stats Viewer</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/loader.css">
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
 
         <div class="wallet-container text-center">
-                <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
-            <p class="page-title"> <img src="img/k2.png" width="17px" alt=""> CORONAVIRUS IN PAKISTAN <i class="fa fa-refresh" aria-hidden="true" ng-click="refreshStats();"></i></p>
+            <p class="page-title">
+                <img src="img/k2.png" width="17px" alt=""> Stats Viewer - Pakistan
+                <i class="fa fa-refresh" aria-hidden="true" ng-click="refreshStats();"></i>
+            </p>
 
-            <div class="amount-box text-center"> 
-                    <p class="totalcase">Total Cases</p>
-                    <p class="amount" ng-bind="cases.cases.total ? cases.cases.total : 0;">0</p>
-            <table> 
-                    <tr>
-                        <!-- <td>
-                            <p>Total Cases</p>
-                            <p class="amount">2730</p>
-                        </td> -->
-                        <td>
-                            <p class="totalcase">Total Tests</p>
-                            <p class="amount" ng-bind="cases.tests.total ? cases.tests.total : 0;"> 0</p>
-                        </td>
-                        <td>
-                            <p class="recover">Recoverd</p>
-                            <p class="amount" ng-bind="cases.cases.recovered ? cases.cases.recovered : 0;"> 0</p>
-                        </td>
-                        <td>
-                            <p class="critical">CRITICAL</p>
-                            <p class="amount" ng-bind="cases.cases.critical ? cases.cases.critical : 0;">0</p>
-                        </td>
-                        <td>
-                            <p class="deaths">DEATHS</p>
-                            <p class="amount" ng-bind="cases.deaths.total ? cases.deaths.total : 0;">0</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <!-- <td>
-                            <p class="critical">Cases (24hours)</p>
-                            <p class="amount" ng-bind="cases.totalData.CasesIn24Hours ? cases.totalData.CasesIn24Hours : 0;">0</p>
-                        </td> -->
-                        <td>
-                            <p class="critical">Deaths (24Hours)</p>
-                            <!-- <small>12pm to 12pm</small> -->
-                            <p class="amount" ng-bind="cases.deaths.new ? cases.deaths.new : 0;">0</p>
-                        </td>
-                        <!-- <td>
-                            <p class="critical">Tests (24Hours)</p>
-                            <p class="amount" ng-bind="cases.totalData.TestsIn24Hours ? cases.totalData.TestsIn24Hours : 0;">0</p>
-                        </td> -->
-                    </tr>
-                    <!-- <tr>
-                        <td>
-                            <p class="critical">ICT</p>
-                            <p class="amount" ng-bind="cases.cities[0].CasesNumber ? cases.cities[0].CasesNumber : 0;">0</p>
-                        </td>
-                        <td>
-                            <p class="critical">Punjab</p>
-                            <p class="amount" ng-bind="cases.cities[1].CasesNumber ? cases.cities[1].CasesNumber : 0;">0</p>
-                        </td>
-                        <td>
-                            <p class="critical">Sindh</p>
-                            <p class="amount" ng-bind="cases.cities[2].CasesNumber ? cases.cities[2].CasesNumber : 0;">0</p>
-                        </td>
-                        <td>
-                            <p class="critical">KP</p>
-                            <p class="amount" ng-bind="cases.cities[3].CasesNumber ? cases.cities[3].CasesNumber : 0;">0</p>
-                        </td>
-                    </tr>
-                    <tr>
-                            <td>
-                                    <p class="critical">Balochistan</p>
-                                    <p class="amount" ng-bind="cases.cities[4].CasesNumber ? cases.cities[4].CasesNumber : 0;">0</p>
-                                </td>
-                                <td>
-                                    <p class="critical">AJK</p>
-                                    <p class="amount" ng-bind="cases.cities[5].CasesNumber ? cases.cities[5].CasesNumber : 0;">0</p>
-                                </td>
-                                <td>
-                                    <p class="critical">GB</p>
-                                    <p class="amount" ng-bind="cases.cities[6].CasesNumber ? cases.cities[6].CasesNumber : 0;">0</p>
-                                </td>
-                                
-                    </tr> -->
-                </table>
-        </div>
-        <div class="txn-history">
-                <p class="txn-list" ng-bind="cases.time ? cases.time :'';"></p>
+            <div class="amount-box text-center">
+                <p class="totalcase">Public Data Insights</p>
+                <h2 class="mt-3">Today's Trends</h2>
+                <ul class="list-group text-left">
+                    <li class="list-group-item">
+                        📈 <strong>Electricity Usage:</strong> 12,500 MW
+                    </li>
+                    <li class="list-group-item">
+                        🌦 <strong>Rainfall Today:</strong> 35mm
+                    </li>
+                    <li class="list-group-item">
+                        🚌 <strong>Public Transport Usage:</strong> 84,000 passengers
+                    </li>
+                    <li class="list-group-item">
+                        📶 <strong>Internet Activity:</strong> 8.3M sessions
+                    </li>
+                </ul>
             </div>
-            <div class="footer-menu">
-                <div class="row text-center">
-                </div>
+
+            <div class="footer-menu mt-4">
+                <p class="small text-muted">This app displays sample public data for demonstration purposes.</p>
             </div>
 
         </div>
-    </div>      
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/angular.min.js"></script>
-        <script type="text/javascript" src="js/controller.js"></script>
-        <script type="text/javascript" src="js/method.js"></script>
-    </body>
+    </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/controller.js"></script>
+    <script type="text/javascript" src="js/method.js"></script>
+</body>
+<style>
+    li.list-group-item {
+        background-color: unset !important;
+    }
+</style>
+
 </html>

@@ -7,13 +7,7 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.coronapk.pk"
-    },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.coronapk.pk"
-    },
-    "cordova-play-services-version-adapter": {
       "PACKAGE_NAME": "com.coronapk.pk"
     }
   },

@@ -12,14 +12,7 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.coronapk.pk"
-    },
-    "cordova-play-services-version-adapter": {
-      "PACKAGE_NAME": "com.coronapk.pk"
     }
   },
-  "dependent_plugins": {
-    "cordova-connectivity-monitor": {
-      "PACKAGE_NAME": "com.coronapk.pk"
-    }
-  }
+  "dependent_plugins": {}
 }
