@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "StatsViewer",
+  "short_name": "StatsViewer",
+  "version": "com.coronapk.pk",
+  "description": "A utility app for viewing public data trends and statistics.",
+  "author": "Visionary Sols",
+  "icons": [],
+  "start_url": "index.html"
+}

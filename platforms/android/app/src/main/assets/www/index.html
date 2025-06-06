@@ -12,54 +12,173 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loader.css">
 </head>
 
 <body ng-app="myApp" ng-controller="myCtrl">
     <div class="container">
-
         <div class="wallet-container text-center">
             <p class="page-title">
                 <img src="img/k2.png" width="17px" alt=""> Stats Viewer - Pakistan
-                <i class="fa fa-refresh" aria-hidden="true" ng-click="refreshStats();"></i>
+                <i class="fa fa-refresh" aria-hidden="true" ng-click="getData();"></i>
             </p>
 
-            <div class="amount-box text-center">
-                <p class="totalcase">Public Data Insights</p>
+            <div class="text-right">
+                <label>Year: </label>
+                <select ng-model="selectedYear" ng-options="year for year in availableYears"
+                    ng-change="getData()"></select>
+            </div>
+
+            <div class="amount-box text-center" ng-if="dataLoaded">
                 <h2 class="mt-3">Today's Trends</h2>
                 <ul class="list-group text-left">
-                    <li class="list-group-item">
-                        📈 <strong>Electricity Usage:</strong> 12,500 MW
+                    <li class="list-group-item">🌦 <strong>Rainfall Today:</strong> {{ insights.rainfall_today ||
+                        'Loading...' }}</li>
+                    <li class="list-group-item">💰 <strong>Tax Revenue:</strong> {{financialStats.taxRevenue}}</li>
+                    <li class="list-group-item">🌍 <strong>External Debt:</strong> {{financialStats.externalDebt}}</li>
+                    <li class="list-group-item">💵 <strong>GDP:</strong> {{financialStats.gdp}}</li>
+                    <li class="list-group-item">👥 <strong>Population:</strong> {{financialStats.population}}</li>
+                    <li class="list-group-item">🏥 <strong>Health Expenditure:</strong> {{financialStats.healthExp}}
                     </li>
-                    <li class="list-group-item">
-                        🌦 <strong>Rainfall Today:</strong> 35mm
+                    <li class="list-group-item">🪖 <strong>Military Expenditure:</strong> {{financialStats.militaryExp}}
                     </li>
-                    <li class="list-group-item">
-                        🚌 <strong>Public Transport Usage:</strong> 84,000 passengers
-                    </li>
-                    <li class="list-group-item">
-                        📶 <strong>Internet Activity:</strong> 8.3M sessions
-                    </li>
+                    <li class="list-group-item">⏱ <strong>Last Refreshed:</strong> {{ lastUpdated }}</li>
                 </ul>
             </div>
 
-            <div class="footer-menu mt-4">
-                <p class="small text-muted">This app displays sample public data for demonstration purposes.</p>
+            <div class="text-center" ng-if="!dataLoaded">
+                <p>Loading data, please wait...</p>
             </div>
 
+            <div class="mt-4">
+                <canvas id="gdpChart" height="120"></canvas>
+            </div>
         </div>
     </div>
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/controller.js"></script>
-    <script type="text/javascript" src="js/method.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('myApp', []);
+
+        app.controller('myCtrl', function ($scope, $http) {
+            $scope.dataLoaded = false;
+            $scope.insights = {};
+            $scope.availableYears = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013];
+            $scope.selectedYear = 2023;
+            $scope.lastUpdated = '';
+
+            $scope.financialStats = {
+                taxRevenue: 'Loading...',
+                externalDebt: 'Loading...',
+                gdp: 'Loading...',
+                population: 'Loading...',
+                healthExp: 'Loading...',
+                militaryExp: 'Loading...'
+            };
+
+            $scope.getData = function () {
+                $scope.dataLoaded = false;
+                const latitude = 31.5497;
+                const longitude = 74.3436;
+                const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=precipitation_sum&timezone=Asia%2FKarachi`;
+
+                $http.get(apiUrl)
+                    .then(function (response) {
+                        const rainfall = response.data.daily.precipitation_sum[0];
+                        $scope.insights.rainfall_today = rainfall + " mm";
+                        $scope.dataLoaded = true;
+                        $scope.lastUpdated = new Date().toLocaleString();
+                    })
+                    .catch(function (error) {
+                        console.error("API error:", error);
+                        $scope.dataLoaded = true;
+                        $scope.lastUpdated = new Date().toLocaleString();
+                    });
+
+                function getLatestValidValue(url, callback) {
+                    $http.get(url).then(function (response) {
+                        const records = response.data[1];
+                        if (records && records.length) {
+                            const match = records.find(r => r.date === $scope.selectedYear.toString());
+                            callback(match ? match.value : null);
+                        } else {
+                            callback(null);
+                        }
+                    }, function () {
+                        callback(null);
+                    });
+                }
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/GC.TAX.TOTL.CN?format=json&per_page=100", function (val) {
+                    $scope.financialStats.taxRevenue = val ? val.toLocaleString() + " PKR" : "Not Available";
+                });
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/DT.DOD.DECT.CD?format=json&per_page=100", function (val) {
+                    $scope.financialStats.externalDebt = val ? "$" + val.toLocaleString() : "Not Available";
+                });
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/NY.GDP.MKTP.CD?format=json&per_page=100", function (val) {
+                    $scope.financialStats.gdp = val ? "$" + val.toLocaleString() : "Not Available";
+                });
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/SP.POP.TOTL?format=json&per_page=100", function (val) {
+                    $scope.financialStats.population = val ? val.toLocaleString() + " people" : "Not Available";
+                });
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/SH.XPD.CHEX.GD.ZS?format=json&per_page=100", function (val) {
+                    $scope.financialStats.healthExp = val ? val.toFixed(2) + " %" : "Not Available";
+                });
+
+                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/MS.MIL.XPND.GD.ZS?format=json&per_page=100", function (val) {
+                    $scope.financialStats.militaryExp = val ? val.toFixed(2) + " %" : "Not Available";
+                });
+
+                // GDP Chart
+                $http.get("https://api.worldbank.org/v2/country/PK/indicator/NY.GDP.MKTP.CD?format=json&per_page=100")
+                    .then(function (response) {
+                        const data = response.data[1].filter(e => e.value !== null).slice(0, 6).reverse();
+                        const labels = data.map(e => e.date);
+                        const values = data.map(e => e.value);
+                        const ctx = document.getElementById('gdpChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'GDP (USD)',
+                                    data: values,
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 2,
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { display: true }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: false
+                                    }
+                                }
+                            }
+                        });
+                    });
+            };
+
+            $scope.getData();
+        });
+    </script>
+
+    <style>
+        li.list-group-item {
+            background-color: unset !important;
+        }
+    </style>
 </body>
-<style>
-    li.list-group-item {
-        background-color: unset !important;
-    }
-</style>
 
 </html>

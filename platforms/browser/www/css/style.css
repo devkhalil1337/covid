@@ -1,0 +1,128 @@
+body {
+    background-color: #3fb0ef !important;
+}
+
+.wallet-container {
+    background: url(../img/khalil2.png);
+    background-repeat: round;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    font-size: 15px;
+    padding: 20px 20px 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.page-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.fa-user,
+.fa-refresh {
+    float: right;
+}
+
+.fa-home {
+    margin-right: 10px;
+}
+
+.amount-box img {
+    width: 50px;
+}
+
+.amount {
+    font-size: 35px;
+}
+
+.amount-box p {
+    margin: 10px;
+}
+
+.btn-group {
+    margin: 20px 0;
+}
+
+.btn-group .btn {
+    margin: 8px;
+    border-radius: 20px !important;
+    font-size: 12px;
+}
+
+.txn-history {
+    clear: both;
+    position: relative;
+    height: 200px;
+    margin-top: 141px;
+    text-align: left;
+}
+
+.txn-list {
+    background-color: #fff;
+    padding: 12px 10px;
+    color: rgb(67, 160, 71);
+    font-size: 14px;
+    margin: 7px 0;
+}
+
+.doubt-amount {
+    color: red;
+    float: right;
+}
+
+.credit-amount {
+    color: green;
+    float: right;
+}
+
+.footer-menu {
+    margin: 20px -20px 0;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    padding: 10px 10px 0;
+}
+
+.footer-menu p {
+    font-size: 12px;
+}
+
+.totalcase {
+    font-weight: bold;
+}
+
+.recover,
+.critical,
+.deaths {
+    font-weight: bold;
+}
+
+/* Optional: you can assign new neutral colors to old COVID terms */
+.recover {
+    color: #4caf50;
+    /* green */
+}
+
+.critical {
+    color: #1976d2;
+    /* blue */
+}
+
+.deaths {
+    color: #f44336;
+    /* red */
+}
+
+@media only screen and (min-width: 320px) {
+    .wallet-container {
+        font-size: 12px;
+        font-weight: 100;
+    }
+
+    .amount {
+        font-size: 20px;
+    }
+}
