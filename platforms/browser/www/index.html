@@ -18,37 +18,47 @@
 </head>
 
 <body ng-app="myApp" ng-controller="myCtrl">
-    <div class="container">
-        <div class="wallet-container text-center">
-            <p class="page-title">
-                <img src="img/k2.png" width="17px" alt=""> Stats Viewer - Pakistan
-                <i class="fa fa-refresh" aria-hidden="true" ng-click="getData();"></i>
-            </p>
-
-            <div class="text-right">
-                <label>Year: </label>
-                <select ng-model="selectedYear" ng-options="year for year in availableYears"
-                    ng-change="getData()"></select>
+    <div class="container mt-4">
+        <div class="card shadow p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+                <h4 class="mb-2">
+                    <img src="img/k2.png" width="17px" alt="">
+                    Stats Viewer - Pakistan
+                    <i class="fa fa-refresh text-primary ml-2" style="cursor: pointer;" aria-hidden="true"
+                        ng-click="getData();"></i>
+                </h4>
+                <div class="form-inline">
+                    <label class="mr-2">Year:</label>
+                    <select class="form-control" ng-model="selectedYear" ng-options="year for year in availableYears"
+                        ng-change="getData()">
+                    </select>
+                </div>
             </div>
 
-            <div class="amount-box text-center" ng-if="dataLoaded">
-                <h2 class="mt-3">Today's Trends</h2>
-                <ul class="list-group text-left">
-                    <li class="list-group-item">🌦 <strong>Rainfall Today:</strong> {{ insights.rainfall_today ||
-                        'Loading...' }}</li>
-                    <li class="list-group-item">💰 <strong>Tax Revenue:</strong> {{financialStats.taxRevenue}}</li>
-                    <li class="list-group-item">🌍 <strong>External Debt:</strong> {{financialStats.externalDebt}}</li>
-                    <li class="list-group-item">💵 <strong>GDP:</strong> {{financialStats.gdp}}</li>
-                    <li class="list-group-item">👥 <strong>Population:</strong> {{financialStats.population}}</li>
-                    <li class="list-group-item">🏥 <strong>Health Expenditure:</strong> {{financialStats.healthExp}}
-                    </li>
-                    <li class="list-group-item">🪖 <strong>Military Expenditure:</strong> {{financialStats.militaryExp}}
-                    </li>
-                    <li class="list-group-item">⏱ <strong>Last Refreshed:</strong> {{ lastUpdated }}</li>
-                </ul>
+            <div ng-if="dataLoaded">
+                <h5 class="mt-4 mb-3 text-center">📊 Today's Trends</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-2" ng-repeat="(label, value) in {
+              '🌦 Rainfall Today': insights.rainfall_today || 'Loading...',
+              '💰 Tax Revenue': financialStats.taxRevenue,
+              '🌍 External Debt': financialStats.externalDebt,
+              '💵 GDP': financialStats.gdp,
+              '👥 Population': financialStats.population,
+              '🏥 Health Expenditure': financialStats.healthExp,
+              '🪖 Military Expenditure': financialStats.militaryExp,
+              '⏱ Last Refreshed': lastUpdated
+            }">
+                        <div class="card p-2 h-100">
+                            <strong>{{label}}:</strong> {{value}}
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="text-center" ng-if="!dataLoaded">
+            <div class="text-center my-4" ng-if="!dataLoaded">
+                <div class="spinner-border text-primary mb-2" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
                 <p>Loading data, please wait...</p>
             </div>
 
@@ -67,7 +77,7 @@
             $scope.dataLoaded = false;
             $scope.insights = {};
             $scope.availableYears = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013];
-            $scope.selectedYear = 2025;
+            $scope.selectedYear = 2023;
             $scope.lastUpdated = '';
 
             $scope.financialStats = {
