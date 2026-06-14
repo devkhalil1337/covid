@@ -1,1 +1,12 @@
+# Dependencies (build tooling — not shipped in the app)
 /node_modules
+
+# Signing secrets — never commit
+build.json
+keystore.txt
+*.keystore
+platforms/android/release-signing.properties
+
+# Generated build output
+/platforms/android/app/build
+/platforms/android/build
