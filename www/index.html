@@ -23,11 +23,20 @@
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                 <h4 class="mb-2">
                     <img src="img/k2.png" width="17px" alt="">
-                    Stats Viewer - Pakistan
-                    <!-- <i class="fa fa-refresh text-primary ml-2" style="cursor: pointer;" aria-hidden="true"
-                        ng-click="getData();"></i> -->
+                    Stats Viewer
+                    <i class="fa fa-refresh text-primary ml-2" style="cursor: pointer;" aria-hidden="true"
+                        title="Refresh" ng-click="getData();"></i>
                 </h4>
-                <div class="col-12">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="mr-2">Country:</label>
+                    <select class="form-control" ng-model="selectedCountry"
+                        ng-options="c.name for c in countries track by c.code" ng-change="getData()">
+                    </select>
+                </div>
+                <div class="col-md-6 mb-2">
                     <label class="mr-2">Year:</label>
                     <select class="form-control" ng-model="selectedYear" ng-options="year for year in availableYears"
                         ng-change="getData()">
@@ -36,21 +45,46 @@
             </div>
 
             <div ng-if="dataLoaded">
-                <h5 class="mt-4 mb-3 text-center">📊 Today's Trends</h5>
+                <h5 class="mt-4 mb-2 text-center">📊 Key Stats</h5>
                 <div class="row">
-                    <div class="col-md-6 mb-2" ng-repeat="(label, value) in {
-              '🌦 Rainfall (year total)': insights.rainfall_today || 'Loading...',
-              '💰 Tax Revenue': financialStats.taxRevenue,
-              '🌍 External Debt': financialStats.externalDebt,
-              '💵 GDP': financialStats.gdp,
-              '👥 Population': financialStats.population,
-              '🏥 Health Expenditure': financialStats.healthExp,
-              '🪖 Military Expenditure': financialStats.militaryExp,
-              '⏱ Last Refreshed': lastUpdated
-            }">
+                    <div class="col-md-4 col-6 mb-3" ng-repeat="s in mainStats">
                         <div class="card p-2 h-100">
-                            <strong>{{label}}:</strong> {{value}}
+                            <div class="small text-muted">{{s.label}}</div>
+                            <div class="font-weight-bold">
+                                {{s.valueStr}}<span class="text-muted small">{{s.yearTag}}</span>
+                            </div>
+                            <div class="small" ng-if="s.changeStr"
+                                ng-class="s.dir === 'up' ? 'text-success' : 'text-danger'">
+                                <span ng-if="s.dir === 'up'">▲</span><span ng-if="s.dir === 'down'">▼</span>
+                                {{s.changeStr}} <span class="text-muted">YoY</span>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-3 mb-2 text-center">🏛 Budget (% of GDP)</h5>
+                <div class="row">
+                    <div class="col-md-4 col-6 mb-3" ng-repeat="s in budgetStats">
+                        <div class="card p-2 h-100">
+                            <div class="small text-muted">{{s.label}}</div>
+                            <div class="font-weight-bold">
+                                {{s.valueStr}}<span class="text-muted small">{{s.yearTag}}</span>
+                            </div>
+                            <div class="small" ng-if="s.changeStr"
+                                ng-class="s.dir === 'up' ? 'text-success' : 'text-danger'">
+                                <span ng-if="s.dir === 'up'">▲</span><span ng-if="s.dir === 'down'">▼</span>
+                                {{s.changeStr}} <span class="text-muted">YoY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="card p-2"><strong>🌦 Rainfall (year total):</strong> {{rainfall}}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="card p-2"><strong>⏱ Last Refreshed:</strong> {{lastUpdated}}</div>
                     </div>
                 </div>
             </div>
@@ -70,157 +104,7 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript">
-        var app = angular.module('myApp', []);
-
-        app.controller('myCtrl', function ($scope, $http) {
-            $scope.dataLoaded = false;
-            $scope.insights = {};
-            $scope.availableYears = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013];
-            $scope.selectedYear = 2023;
-            $scope.lastUpdated = '';
-
-            $scope.financialStats = {
-                taxRevenue: 'Loading...',
-                externalDebt: 'Loading...',
-                gdp: 'Loading...',
-                population: 'Loading...',
-                healthExp: 'Loading...',
-                militaryExp: 'Loading...'
-            };
-
-            $scope.getData = function () {
-                $scope.dataLoaded = false;
-                $scope.insights.rainfall_today = 'Loading...';
-                const latitude = 31.5497;
-                const longitude = 74.3436;
-
-                // Rainfall for the SELECTED year (annual total) using the historical archive API.
-                // For the current year, only go up to today; archive has no future dates.
-                const today = new Date();
-                const currentYear = today.getFullYear();
-                const year = $scope.selectedYear;
-                const startDate = year + "-01-01";
-                const endDate = year >= currentYear
-                    ? today.toISOString().slice(0, 10)
-                    : year + "-12-31";
-                const apiUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=${startDate}&end_date=${endDate}&daily=precipitation_sum&timezone=Asia%2FKarachi`;
-
-                $http.get(apiUrl)
-                    .then(function (response) {
-                        const daily = (response.data.daily && response.data.daily.precipitation_sum) || [];
-                        const total = daily
-                            .filter(function (v) { return v !== null && !isNaN(v); })
-                            .reduce(function (sum, v) { return sum + v; }, 0);
-                        $scope.insights.rainfall_today = daily.length
-                            ? total.toFixed(1) + " mm"
-                            : "Not Available";
-                        $scope.dataLoaded = true;
-                        $scope.lastUpdated = new Date().toLocaleString();
-                    })
-                    .catch(function (error) {
-                        console.error("API error:", error);
-                        $scope.insights.rainfall_today = "Not Available";
-                        $scope.dataLoaded = true;
-                        $scope.lastUpdated = new Date().toLocaleString();
-                    });
-
-                // Returns the value for the selected year. If that year has no data yet
-                // (World Bank usually lags 1-2 years), it falls back to the most recent
-                // available value at or before the selected year, and reports which year
-                // that value actually came from so the UI can label it.
-                function getLatestValidValue(url, callback) {
-                    $http.get(url).then(function (response) {
-                        const records = response.data[1];
-                        if (records && records.length) {
-                            const exact = records.find(r => r.date === $scope.selectedYear.toString());
-                            if (exact && exact.value !== null) {
-                                callback(exact.value, parseInt(exact.date, 10));
-                                return;
-                            }
-                            // records are sorted newest-first; pick latest non-null <= selected year
-                            const fallback = records.find(r =>
-                                r.value !== null && parseInt(r.date, 10) <= $scope.selectedYear);
-                            callback(fallback ? fallback.value : null,
-                                fallback ? parseInt(fallback.date, 10) : null);
-                        } else {
-                            callback(null, null);
-                        }
-                    }, function () {
-                        callback(null, null);
-                    });
-                }
-
-                // Adds a "(2023)" suffix when the value comes from a different year than selected.
-                function yearTag(year) {
-                    return (year && year !== $scope.selectedYear) ? " (" + year + ")" : "";
-                }
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/GC.TAX.TOTL.CN?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.taxRevenue = val ? val.toLocaleString() + " PKR" + yearTag(year) : "Not Available";
-                });
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/DT.DOD.DECT.CD?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.externalDebt = val ? "$" + val.toLocaleString() + yearTag(year) : "Not Available";
-                });
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/NY.GDP.MKTP.CD?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.gdp = val ? "$" + val.toLocaleString() + yearTag(year) : "Not Available";
-                });
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/SP.POP.TOTL?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.population = val ? val.toLocaleString() + " people" + yearTag(year) : "Not Available";
-                });
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/SH.XPD.CHEX.GD.ZS?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.healthExp = val ? val.toFixed(2) + " %" + yearTag(year) : "Not Available";
-                });
-
-                getLatestValidValue("https://api.worldbank.org/v2/country/PK/indicator/MS.MIL.XPND.GD.ZS?format=json&per_page=100", function (val, year) {
-                    $scope.financialStats.militaryExp = val ? val.toFixed(2) + " %" + yearTag(year) : "Not Available";
-                });
-
-                // GDP Chart — 6 years ending at the selected year
-                $http.get("https://api.worldbank.org/v2/country/PK/indicator/NY.GDP.MKTP.CD?format=json&per_page=100")
-                    .then(function (response) {
-                        const data = response.data[1]
-                            .filter(e => e.value !== null && parseInt(e.date, 10) <= $scope.selectedYear)
-                            .slice(0, 6)
-                            .reverse();
-                        const labels = data.map(e => e.date);
-                        const values = data.map(e => e.value);
-                        const ctx = document.getElementById('gdpChart').getContext('2d');
-                        if ($scope.gdpChart) { $scope.gdpChart.destroy(); }
-                        $scope.gdpChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'GDP (USD)',
-                                    data: values,
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 2,
-                                    fill: false
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: { display: true }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: false
-                                    }
-                                }
-                            }
-                        });
-                    });
-            };
-
-            $scope.getData();
-        });
-    </script>
+    <script type="text/javascript" src="js/controller.js"></script>
 
     <style>
         li.list-group-item {
